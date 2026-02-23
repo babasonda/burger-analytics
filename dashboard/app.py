@@ -157,10 +157,18 @@ def apply_heatmap_scale(fig, z_values, T, p_low=10, p_high=90):
     return fig
 
 
-# ── data guard ────────────────────────────────────────────────────────────────
+# ── data guard — auto-seed on first run (e.g. Streamlit Cloud) ───────────────
 if not os.path.exists(DB_PATH):
-    st.error("Database not found. Run `notebooks/exploration.ipynb` → Run All first.")
-    st.stop()
+    from datetime import date as _date
+    from src.data_generator import seed_database as _seed
+    os.makedirs(os.path.dirname(DB_PATH), exist_ok=True)
+    with st.spinner("Generating demo data — first run takes 2–3 minutes…"):
+        _seed(
+            db_path=DB_PATH,
+            start_date=_date(2022, 1, 1),
+            end_date=_date(2025, 12, 31),
+        )
+    st.rerun()
 
 
 # ── load data ─────────────────────────────────────────────────────────────────
