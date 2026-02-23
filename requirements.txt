@@ -1,0 +1,27 @@
+# Database
+sqlalchemy
+
+# Data manipulation and analysis
+pandas
+numpy
+
+# Visualization
+plotly
+matplotlib
+seaborn
+
+# Jupyter
+jupyter
+ipykernel
+
+# API integration
+requests
+
+# Dashboard
+streamlit
+
+# Machine learning
+scikit-learn
+
+# Utilities
+python-dotenv
