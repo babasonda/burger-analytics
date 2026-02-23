@@ -10,15 +10,11 @@ plotly
 matplotlib
 seaborn
 
-# Jupyter
-jupyter
-ipykernel
-
 # API integration
 requests
 
 # Dashboard
-streamlit
+streamlit>=1.38.0
 
 # Machine learning
 scikit-learn
