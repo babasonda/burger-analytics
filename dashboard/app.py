@@ -43,6 +43,18 @@ LIGHT = dict(
 GRID_DARK  = 'rgba(156,163,175,0.12)'
 GRID_LIGHT = 'rgba(100,116,139,0.15)'
 
+# Shared heatmap colorscale — cool grey → teal → amber → orange (no white, no black)
+HEAT_SCALE = [
+    [0.00, '#69767C'],
+    [0.15, '#758E93'],
+    [0.30, '#85A1A0'],
+    [0.50, '#C88D6B'],
+    [0.70, '#ED7630'],
+    [0.82, '#FC7021'],
+    [0.92, '#FE620A'],
+    [1.00, '#FE5004'],
+]
+
 
 # ── CSS injection ─────────────────────────────────────────────────────────────
 def inject_css(T, dark: bool):
@@ -136,18 +148,12 @@ def bi_heatmap(fig, T, height=420):
     return fig
 
 
-def apply_heatmap_scale(fig, z_values, T, p_low=10, p_high=90):
-    """Plotly Plasma colorscale with P10/P90 percentile clipping."""
-    flat = np.array(z_values, dtype=float).ravel()
-    flat = flat[~np.isnan(flat)]
-    zmin = float(np.nanpercentile(flat, p_low))
-    zmax = float(np.nanpercentile(flat, p_high))
-    if zmax - zmin < 1:
-        zmin = float(np.nanpercentile(flat, 5))
-        zmax = float(np.nanpercentile(flat, 95))
+def apply_heatmap_scale(fig, z_values, T):
+    """Apply HEAT_SCALE with full data range (nanmin → nanmax, no clipping)."""
     fig.update_traces(
-        colorscale='Plasma',
-        zmin=zmin, zmax=zmax,
+        colorscale=HEAT_SCALE,
+        zmin=float(np.nanmin(z_values)),
+        zmax=float(np.nanmax(z_values)),
         colorbar=dict(
             tickfont=dict(color=T['muted'], size=10),
             title_font=dict(color=T['muted'], size=10),
